@@ -19,24 +19,19 @@ public class ContaBancaria {
 
     private static double realizarOperacao(int op, double saldo, Scanner sc) {
         switch (op) {
-            case 1:
-                System.out.printf("O saldo atual é R$ %.2f\n\n", saldo);
-                break;
-            case 2:
+            case 1 -> System.out.printf("O saldo atual é R$ %.2f\n\n", saldo);
+            case 2 -> {
                 System.out.println("Informe o valor a receber:");
                 saldo += sc.nextDouble();
                 System.out.printf("Saldo atualizado R$ %.2f\n\n", saldo);
-                break;
-            case 3:
+            }
+            case 3 -> {
                 System.out.println("Informe o valor que deseja transferir:");
                 saldo -= sc.nextDouble();
                 System.out.printf("Saldo atualizado R$ %.2f\n\n", saldo);
-                break;
-            case 4:
-                System.out.println("Encerrando programa...");
-                break;
-            default:
-                System.out.println("Opção inválida\n");
+            }
+            case 4 -> System.out.println("Encerrando programa...");
+            default -> System.out.println("Opção inválida\n");
         }
         return saldo;
     }
