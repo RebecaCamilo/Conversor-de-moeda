@@ -10,8 +10,14 @@ public class ContaBancaria {
 
         while (op != 4) {
             menu();
-            op = sc.nextInt();
-            saldo = realizarOperacao(op, saldo, sc);
+            try {
+                op = sc.nextInt();
+                saldo = realizarOperacao(op, saldo, sc);
+            } catch (Exception e) {
+                System.out.println("Opção inválida\n");
+                sc.nextLine(); // Limpa o buffer do scanner
+                op = 0;
+            }
         }
 
         sc.close();
@@ -22,18 +28,40 @@ public class ContaBancaria {
             case 1 -> System.out.printf("O saldo atual é R$ %.2f\n\n", saldo);
             case 2 -> {
                 System.out.println("Informe o valor a receber:");
-                saldo += sc.nextDouble();
+                try {
+                    saldo += sc.nextDouble();
+                } catch (Exception e) {
+                    System.out.println("Opção inválida\n");
+                    sc.nextLine(); // Limpa o buffer do scanner
+                    break;
+                }
                 System.out.printf("Saldo atualizado R$ %.2f\n\n", saldo);
             }
             case 3 -> {
                 System.out.println("Informe o valor que deseja transferir:");
-                saldo -= sc.nextDouble();
-                System.out.printf("Saldo atualizado R$ %.2f\n\n", saldo);
+                try {
+                    double valorTranferir = sc.nextDouble();
+                    if (verificaSaldo(valorTranferir, saldo)) {
+                        saldo -= valorTranferir;
+                        System.out.printf("Saldo atualizado R$ %.2f\n\n", saldo);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Opção inválida\n");
+                    sc.nextLine(); // Limpa o buffer do scanner
+                }
             }
             case 4 -> System.out.println("Encerrando programa...");
             default -> System.out.println("Opção inválida\n");
         }
         return saldo;
+    }
+
+    private static boolean verificaSaldo(double valor, double saldo) {
+        if (valor > saldo) {
+            System.out.println("Saldo insuficiente\n");
+            return false;
+        }
+        return true;
     }
 
     private static void menu() {
