@@ -11,13 +11,13 @@ public class ContaBancaria {
         while (op != 4) {
             menu();
             op = sc.nextInt();
-            realizarOperacao(op, saldo, sc);
+            saldo = realizarOperacao(op, saldo, sc);
         }
 
         sc.close();
     }
 
-    private static void realizarOperacao(int op, double saldo, Scanner sc) {
+    private static double realizarOperacao(int op, double saldo, Scanner sc) {
         switch (op) {
             case 1:
                 System.out.printf("O saldo atual é R$ %.2f\n\n", saldo);
@@ -38,6 +38,7 @@ public class ContaBancaria {
             default:
                 System.out.println("Opção inválida\n");
         }
+        return saldo;
     }
 
     private static void menu() {
