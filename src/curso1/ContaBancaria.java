@@ -1,3 +1,5 @@
+package curso1;
+
 import java.util.Scanner;
 
 public class ContaBancaria {
