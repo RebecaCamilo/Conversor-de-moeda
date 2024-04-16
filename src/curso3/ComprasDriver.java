@@ -1,6 +1,5 @@
 package curso3;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
 
@@ -12,10 +11,9 @@ public class ComprasDriver {
         System.out.println("Digite o limite do cartão:");
         Double limite = scNumber.nextDouble();
 
-        Cartao cartao = new Cartao(limite, new ArrayList<>());
+        Cartao cartao = new Cartao(limite);
 
         int op = 1;
-        Double somaCompras = 0.0;
 
         while (op != 0) {
             System.out.println("Digite a descrição da compra");
@@ -23,23 +21,10 @@ public class ComprasDriver {
             System.out.println("Digite o valor da compra");
             Double valor = scNumber.nextDouble();
 
-            if ((somaCompras + valor) <= cartao.getLimite()) {
+            cartao.lancaCompra(new Produto(descricao, valor));
 
-                somaCompras += valor;
-
-                cartao.getProdutos().add(new Produto(descricao, valor));
-                System.out.println("Compra realizada!");
-
-                System.out.println("Digite '0' para sair ou '1' para continuar");
-                op = scNumber.nextInt();
-
-            } else {
-
-                System.out.println("Saldo insuficiente!\n");
-
-                op = 0;
-
-            }
+            System.out.println("Digite '0' para sair ou '1' para continuar");
+            op = scNumber.nextInt();
         }
 
         cartao.getProdutos().sort(Comparator.comparing(Produto::getValor));
@@ -53,7 +38,7 @@ public class ComprasDriver {
 
         System.out.println();
         System.out.println("***************************\n");
-        System.out.println("Saldo do cartão: " + somaCompras);
+        System.out.println("Saldo do cartão: " + cartao.getSaldo());
 
     }
 
