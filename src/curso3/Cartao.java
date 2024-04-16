@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Cartao {
     private Double limite;
-    private List<Produto> produto;
+    private List<Produto> produtos;
 
     public Cartao(Double limite, List<Produto> produto) {
         this.limite = limite;
-        this.produto = produto;
+        this.produtos = produto;
     }
 
     public Double getLimite() {
         return limite;
     }
 
-    public List<Produto> getProduto() {
-        return produto;
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 }
