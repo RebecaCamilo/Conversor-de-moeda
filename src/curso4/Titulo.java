@@ -44,8 +44,8 @@ public class Titulo {
 
     @Override
     public String toString() {
-        return "Nome='" + nome + '\'' +
+        return "[Nome='" + nome + '\'' +
                 ", anoDeLancamento='" + anoDeLancamento + '\'' +
-                ", duração='" + duracao + "'";
+                ", duração='" + duracao + "']";
     }
 }
