@@ -1,4 +1,4 @@
-package curso4;
+package curso4.screen_match;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

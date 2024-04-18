@@ -1,4 +1,4 @@
-package curso4;
+package curso4.screen_match;
 
 public class ErroDeConversaoDeAnoException extends RuntimeException {
     private String mensagem;
