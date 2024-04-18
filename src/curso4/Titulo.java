@@ -1,12 +1,8 @@
 package curso4;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Titulo {
 
-//    @SerializedName("Title")
     private String nome;
-//    @SerializedName("Year")
     private int anoDeLancamento;
     private int duracao;
 
@@ -15,6 +11,11 @@ public class Titulo {
 
     public Titulo(TituloOmdb tituloOmdb) {
         this.nome = tituloOmdb.title();
+
+        if (tituloOmdb.year().length() > 4) {
+            throw new ErroDeConversaoDeAnoException("Não foi possível converter o ano, pois este possui mais de 4 caracteres.");
+        }
+
         this.anoDeLancamento = Integer.valueOf(tituloOmdb.year());
         this.duracao = Integer.valueOf(tituloOmdb.runtime().substring(0, tituloOmdb.runtime().indexOf(" ")));
     }
