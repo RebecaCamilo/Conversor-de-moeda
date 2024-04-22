@@ -1,20 +1,32 @@
 package desafio;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class ConversorMoedas {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Scanner sc = new Scanner(System.in);
+
+        System.out.println(TipoMoeda.values());
 
         System.out.println("Seja bem vinde ao conversor de moedas");
         System.out.println("Digite a partir de qual moeda quer fazer a conversão:");
         TipoMoeda moedaBase = menuPrincipal(sc);
-        System.out.println(moedaBase);
+        System.out.println(moedaBase.name());
 
         System.out.println("Digite para qual moeda quer fazer a conversão:");
-        TipoMoeda moedaObjetivo = menuPrincipal(sc);
-        System.out.println(moedaObjetivo);
+        TipoMoeda moedaFinal = menuPrincipal(sc);
+        System.out.println(moedaFinal.name());
+
+        HttpClient client = createClient();
+        HttpRequest request = createRequestCotacaoMoeda(moedaBase);
+        HttpResponse<String> response = getResponse(client, request);
+
+        System.out.println(response.body());
 
     }
 
@@ -66,7 +78,7 @@ public class ConversorMoedas {
             System.out.println("***********************************************");
 
             String escolha = sc.nextLine();
-            if ( !escolha.equals("+") && (Integer.parseInt(escolha) >= opcaoInicial && Integer.parseInt(escolha) <= (opcaoInicial + incremento - 1)) ) {
+            if (!escolha.equals("+") && (Integer.parseInt(escolha) >= opcaoInicial && Integer.parseInt(escolha) <= (opcaoInicial + incremento - 1))) {
                 return TipoMoeda.fromId(Integer.parseInt(escolha));
             } else if (escolha.equals("+")) {
                 opcaoInicial += incremento;
@@ -78,6 +90,22 @@ public class ConversorMoedas {
         }
         System.out.println("Saindo do menu.");
         return null;
+    }
+
+    private static HttpClient createClient() {
+        return HttpClient.newHttpClient();
+    }
+
+    private static HttpRequest createRequestCotacaoMoeda(TipoMoeda moeda) throws IOException, InterruptedException {
+        String url = "https://v6.exchangerate-api.com/v6/50c9052bdb8f8b10f6264c4e/latest/" + moeda.name();
+
+        return HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+    }
+
+    private static HttpResponse<String> getResponse(HttpClient client, HttpRequest request) throws IOException, InterruptedException {
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
 }
