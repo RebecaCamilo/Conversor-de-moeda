@@ -1,5 +1,10 @@
 package desafio;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import desafio.ref.CepNotFoundException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,7 +19,7 @@ public class ConversorMoedas {
         System.out.println(TipoMoeda.values());
 
         System.out.println("Seja bem vinde ao conversor de moedas");
-        System.out.println("Digite a partir de qual moeda quer fazer a conversão:");
+        System.out.println("Digite qual moeda quer fazer a conversão:");
         TipoMoeda moedaBase = menuPrincipal(sc);
         System.out.println(moedaBase.name());
 
@@ -26,7 +31,12 @@ public class ConversorMoedas {
         HttpRequest request = createRequestCotacaoMoeda(moedaBase);
         HttpResponse<String> response = getResponse(client, request);
 
-        System.out.println(response.body());
+        var taxa = getTaxaDeConversao(response.body(), moedaFinal);
+
+        System.out.println("Quantos " + moedaBase.getDescricao() + " gostaria de converter para " + moedaFinal.getDescricao() + "?" );
+        var valor = sc.nextDouble();
+
+        System.out.println("Esse valor corresponde a " + (valor * taxa) + " " + moedaFinal.getDescricao());
 
     }
 
@@ -106,6 +116,30 @@ public class ConversorMoedas {
 
     private static HttpResponse<String> getResponse(HttpClient client, HttpRequest request) throws IOException, InterruptedException {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    private static double getTaxaDeConversao(String body, TipoMoeda moeda) {
+        validateBody(body);
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
+
+        Moeda response = gson.fromJson(body, Moeda.class);
+
+        String currencyCode = moeda.name();
+        double conversionRate = response.getConversionRate(currencyCode);
+
+        System.out.println("A taxa de conversão para " + currencyCode + ": " + conversionRate);
+
+        return conversionRate;
+
+    }
+
+    private static void validateBody(String body) {
+        if (!body.contains("conversion_rates")) {
+            throw new CepNotFoundException(); //substituir por minha exception
+        }
     }
 
 }
