@@ -1,6 +1,6 @@
-package desafio;
+package desafio.model;
 
-public enum TipoMoeda {
+public enum CurrencyType {
     AED (1, "UAE Dirham"),
     AFN (2, "Afghan Afghani"),
     ALL (3, "Albanian Lek"),
@@ -167,7 +167,7 @@ public enum TipoMoeda {
     private int id;
     private String descricao;
 
-    TipoMoeda(int id, String descricao) {
+    CurrencyType(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
@@ -180,8 +180,8 @@ public enum TipoMoeda {
         return descricao;
     }
 
-    public static TipoMoeda fromId(int id) {
-        for (TipoMoeda tipo : TipoMoeda.values()) {
+    public static CurrencyType fromId(int id) {
+        for (CurrencyType tipo : CurrencyType.values()) {
             if (tipo.getId() == id) {
                 return tipo;
             }
@@ -189,8 +189,8 @@ public enum TipoMoeda {
         throw new IllegalArgumentException("Id de TipoMoeda inválido: " + id);
     }
 
-    public static TipoMoeda fromDescription(String descricao) {
-        for (TipoMoeda tipo : TipoMoeda.values()) {
+    public static CurrencyType fromDescription(String descricao) {
+        for (CurrencyType tipo : CurrencyType.values()) {
             if (tipo.getDescricao().equals(descricao)) {
                 return tipo;
             }
@@ -199,8 +199,8 @@ public enum TipoMoeda {
     }
 
     public static int lastItem() {
-        TipoMoeda[] moedas = TipoMoeda.values();
-        TipoMoeda lastMoeda = moedas[moedas.length - 1];
+        CurrencyType[] moedas = CurrencyType.values();
+        CurrencyType lastMoeda = moedas[moedas.length - 1];
         return lastMoeda.getId();
     }
 }
