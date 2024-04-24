@@ -32,8 +32,7 @@ public class CurrencyConverterDriver {
     }
 
     private static CurrencyType mainMenu(Scanner sc) {
-        String flag = "loop";
-        while (flag.equals("loop")) {
+        while (true) {
             System.out.println("***********************************************");
             System.out.println("""
                 1 -> United States Dollar
@@ -47,16 +46,12 @@ public class CurrencyConverterDriver {
             String op = sc.nextLine();
             switch (op) {
                 case "1":
-                    flag = "end";
                     return CurrencyType.fromDescription("United States Dollar");
                 case "2":
-                    flag = "end";
                     return CurrencyType.fromDescription("Argentine Peso");
                 case "3":
-                    flag = "end";
                     return CurrencyType.fromDescription("Brazilian Real");
                 case "4":
-                    flag = "end";
                     return CurrencyType.fromDescription("Colombian Peso");
                 case "+":
                     return extendedMenu(sc);
@@ -67,7 +62,6 @@ public class CurrencyConverterDriver {
                     System.out.println("Opção inválida");
             }
         }
-        return null;
     }
 
     private static CurrencyType extendedMenu(Scanner sc) {
