@@ -4,16 +4,13 @@ import desafio.connection.ExchangerateApi;
 import desafio.model.Currency;
 import desafio.model.CurrencyType;
 
-import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
 
-public class CurrencyConverter {
-    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+public class CurrencyConverterDriver {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
-        System.out.println(CurrencyType.values());
 
         System.out.println("Seja bem vinde ao conversor de moedas");
         System.out.println("Digite qual moeda quer fazer a conversão:");
@@ -35,32 +32,40 @@ public class CurrencyConverter {
     }
 
     private static CurrencyType mainMenu(Scanner sc) {
-        System.out.println("***********************************************");
-        System.out.println("""
+        String flag = "loop";
+        while (flag.equals("loop")) {
+            System.out.println("***********************************************");
+            System.out.println("""
                 1 -> United States Dollar
                 2 -> Argentine Peso
                 3 -> Brazilian Real
                 4 -> Colombian Peso
                 + -> Mostrar mais opções
                 0 -> Sair""");
-        System.out.println("***********************************************");
+            System.out.println("***********************************************");
 
-        String op = sc.nextLine();
-        switch (op) {
-            case "1":
-                return CurrencyType.fromDescription("United States Dollar");
-            case "2":
-                return CurrencyType.fromDescription("Argentine Peso");
-            case "3":
-                return CurrencyType.fromDescription("Brazilian Real");
-            case "4":
-                return CurrencyType.fromDescription("Colombian Peso");
-            case "+":
-                return extendedMenu(sc);
-            case "0":
-                return null;
-            default:
-                System.out.println("Opção inválida");
+            String op = sc.nextLine();
+            switch (op) {
+                case "1":
+                    flag = "end";
+                    return CurrencyType.fromDescription("United States Dollar");
+                case "2":
+                    flag = "end";
+                    return CurrencyType.fromDescription("Argentine Peso");
+                case "3":
+                    flag = "end";
+                    return CurrencyType.fromDescription("Brazilian Real");
+                case "4":
+                    flag = "end";
+                    return CurrencyType.fromDescription("Colombian Peso");
+                case "+":
+                    return extendedMenu(sc);
+                case "0":
+                    System.out.println("Finalizando programa...");
+                    System.exit(0);
+                default:
+                    System.out.println("Opção inválida");
+            }
         }
         return null;
     }
@@ -81,14 +86,20 @@ public class CurrencyConverter {
             System.out.println("0 -> Sair");
             System.out.println("***********************************************");
 
-            String escolha = sc.nextLine();
-            if (!escolha.equals("+") && (Integer.parseInt(escolha) >= opcaoInicial && Integer.parseInt(escolha) <= (opcaoInicial + incremento - 1))) {
-                return CurrencyType.fromId(Integer.parseInt(escolha));
-            } else if (escolha.equals("+")) {
-                opcaoInicial += incremento;
-            } else if (escolha.equals("0")) {
-                break;
-            } else {
+            try {
+                String escolha = sc.nextLine();
+                if (!escolha.equals("+") && (Integer.parseInt(escolha) >= opcaoInicial && Integer.parseInt(escolha) <= (opcaoInicial + incremento - 1))) {
+                    return CurrencyType.fromId(Integer.parseInt(escolha));
+                } else if (escolha.equals("+")) {
+                    opcaoInicial += incremento;
+                } else if (escolha.equals("0")) {
+                    System.out.println("Finalizando programa...");
+                    System.exit(0);
+                } else {
+                    System.out.println("Opção inválida.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
                 System.out.println("Opção inválida.");
             }
         }
