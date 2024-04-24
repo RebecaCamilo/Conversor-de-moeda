@@ -1,8 +1,9 @@
 package desafio;
 
-import desafio.connection.ExchangerateApi;
+import desafio.connection.api.ExchangerateApi;
 import desafio.model.Currency;
 import desafio.model.CurrencyType;
+import desafio.service.Converter;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -14,24 +15,22 @@ public class CurrencyConverterDriver {
 
         System.out.println("Seja bem vinde ao conversor de moedas");
         System.out.println("Digite qual moeda quer fazer a conversão:");
-        CurrencyType moedaBase = mainMenu(sc);
+        CurrencyType baseCurrency = menu(sc);
 
         System.out.println("Digite para qual moeda quer fazer a conversão:");
-        CurrencyType moedaFinal = mainMenu(sc);
+        CurrencyType finalCurrency = menu(sc);
 
-        HttpRequest request = ExchangerateApi.createRequestToGetCurrencyRate(moedaBase);
+        HttpRequest request = ExchangerateApi.createRequestToGetCurrencyRate(baseCurrency);
         HttpResponse<String> response = ExchangerateApi.getResponse(request);
 
-        var taxa = Currency.getConversionRate(response.body(), moedaFinal);
+        var rate = Currency.getConversionRate(response.body(), finalCurrency);
 
-        System.out.println("Quantos " + moedaBase.getDescricao() + " gostaria de converter para " + moedaFinal.getDescricao() + "?" );
-        var valor = sc.nextDouble();
+        double convertedValue = Converter.covert(sc, rate, baseCurrency, finalCurrency);
 
-        System.out.println("Esse valor corresponde a " + (valor * taxa) + " " + moedaFinal.getDescricao());
-
+        System.out.printf("Esse valor corresponde a %.3f %s", convertedValue, finalCurrency.getDescription());
     }
 
-    private static CurrencyType mainMenu(Scanner sc) {
+    private static CurrencyType menu(Scanner sc) {
         while (true) {
             System.out.println("***********************************************");
             System.out.println("""
@@ -65,16 +64,16 @@ public class CurrencyConverterDriver {
     }
 
     private static CurrencyType extendedMenu(Scanner sc) {
-        int opcaoInicial = 1;
-        int incremento = 10;
+        int initialOption = 1;
+        int increment = 10;
 
-        while (opcaoInicial <= CurrencyType.lastItem()) {
+        while (initialOption <= CurrencyType.lastItem()) {
             System.out.println("***********************************************");
-            for (int i = opcaoInicial - 1; i < (opcaoInicial + incremento - 1); i++) {
+            for (int i = initialOption - 1; i < (initialOption + increment - 1); i++) {
                 if ((i + 1) > CurrencyType.lastItem()) {
                     break;
                 }
-                System.out.println((i + 1) + " -> " + CurrencyType.fromId(i + 1).getDescricao());
+                System.out.println((i + 1) + " -> " + CurrencyType.fromId(i + 1).getDescription());
             }
             System.out.println("+ -> Mostrar mais opções");
             System.out.println("0 -> Sair");
@@ -82,10 +81,10 @@ public class CurrencyConverterDriver {
 
             try {
                 String escolha = sc.nextLine();
-                if (!escolha.equals("+") && (Integer.parseInt(escolha) >= opcaoInicial && Integer.parseInt(escolha) <= (opcaoInicial + incremento - 1))) {
+                if (!escolha.equals("+") && (Integer.parseInt(escolha) >= initialOption && Integer.parseInt(escolha) <= (initialOption + increment - 1))) {
                     return CurrencyType.fromId(Integer.parseInt(escolha));
                 } else if (escolha.equals("+")) {
-                    opcaoInicial += incremento;
+                    initialOption += increment;
                 } else if (escolha.equals("0")) {
                     System.out.println("Finalizando programa...");
                     System.exit(0);

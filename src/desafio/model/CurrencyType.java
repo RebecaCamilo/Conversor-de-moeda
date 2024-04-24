@@ -165,42 +165,42 @@ public enum CurrencyType {
     ZWL (162, "Zimbabwean Dollar");
 
     private int id;
-    private String descricao;
+    private String description;
 
-    CurrencyType(int id, String descricao) {
+    CurrencyType(int id, String description) {
         this.id = id;
-        this.descricao = descricao;
+        this.description = description;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public static CurrencyType fromId(int id) {
-        for (CurrencyType tipo : CurrencyType.values()) {
-            if (tipo.getId() == id) {
-                return tipo;
+        for (CurrencyType type : CurrencyType.values()) {
+            if (type.getId() == id) {
+                return type;
             }
         }
         throw new IllegalArgumentException("Id de TipoMoeda inválido: " + id);
     }
 
     public static CurrencyType fromDescription(String descricao) {
-        for (CurrencyType tipo : CurrencyType.values()) {
-            if (tipo.getDescricao().equals(descricao)) {
-                return tipo;
+        for (CurrencyType type : CurrencyType.values()) {
+            if (type.getDescription().equals(descricao)) {
+                return type;
             }
         }
         throw new IllegalArgumentException("Descrição de TipoMoeda inválido: " + descricao);
     }
 
     public static int lastItem() {
-        CurrencyType[] moedas = CurrencyType.values();
-        CurrencyType lastMoeda = moedas[moedas.length - 1];
-        return lastMoeda.getId();
+        CurrencyType[] currencies = CurrencyType.values();
+        CurrencyType lastCurrencyType = currencies[currencies.length - 1];
+        return lastCurrencyType.getId();
     }
 }

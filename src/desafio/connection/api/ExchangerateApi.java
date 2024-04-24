@@ -1,4 +1,4 @@
-package desafio.connection;
+package desafio.connection.api;
 
 import desafio.model.CurrencyType;
 
