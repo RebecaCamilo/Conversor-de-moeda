@@ -40,6 +40,8 @@ public class CurrencyConverterDriver {
 
         System.out.printf("Esse valor corresponde a %.4f %s\n\n", convertedValue, finalCurrency.getDescription());
 
+        ConversionHistoryFile.save(baseValue, baseCurrency.name(), convertedValue, finalCurrency.name());
+
     }
 
     private static CurrencyType menu(Scanner sc) {
