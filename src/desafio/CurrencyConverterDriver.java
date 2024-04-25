@@ -1,12 +1,14 @@
 package desafio;
 
 import desafio.connection.api.ExchangerateApi;
-import desafio.model.Currency;
+import desafio.connection.file.ConversionHistoryFile;
 import desafio.model.CurrencyType;
 import desafio.service.Converter;
+import desafio.service.JsonConverter;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CurrencyConverterDriver {
@@ -23,23 +25,33 @@ public class CurrencyConverterDriver {
         HttpRequest request = ExchangerateApi.createRequestToGetCurrencyRate(baseCurrency);
         HttpResponse<String> response = ExchangerateApi.getResponse(request);
 
-        var rate = Currency.getConversionRate(response.body(), finalCurrency);
+        var rate = JsonConverter.getConversionRate(response.body(), finalCurrency);
 
-        double convertedValue = Converter.covert(sc, rate, baseCurrency, finalCurrency);
+        double baseValue = 0.0;
+        System.out.println("Quantos " + baseCurrency.getDescription() + " gostaria de converter para " + finalCurrency.getDescription() + "?");
+        try {
+            baseValue = sc.nextDouble();
+        } catch (InputMismatchException e) {
+            System.out.println("Valor inválido. Finalizando programa...");
+            System.exit(0);
+        }
 
-        System.out.printf("Esse valor corresponde a %.3f %s", convertedValue, finalCurrency.getDescription());
+        double convertedValue = Converter.covert(baseValue, rate);
+
+        System.out.printf("Esse valor corresponde a %.4f %s\n\n", convertedValue, finalCurrency.getDescription());
+
     }
 
     private static CurrencyType menu(Scanner sc) {
         while (true) {
             System.out.println("***********************************************");
             System.out.println("""
-                1 -> United States Dollar
-                2 -> Argentine Peso
-                3 -> Brazilian Real
-                4 -> Colombian Peso
-                + -> Mostrar mais opções
-                0 -> Sair""");
+                    1 -> United States Dollar
+                    2 -> Argentine Peso
+                    3 -> Brazilian Real
+                    4 -> Colombian Peso
+                    + -> Mostrar mais opções
+                    0 -> Sair""");
             System.out.println("***********************************************");
 
             String op = sc.nextLine();

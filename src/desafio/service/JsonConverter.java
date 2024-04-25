@@ -1,20 +1,12 @@
-package desafio.model;
+package desafio.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import desafio.exception.InvalidJsonException;
+import desafio.model.CurrencyConversionRate;
+import desafio.model.CurrencyType;
 
-import java.util.Map;
-
-public class Currency {
-    @SerializedName("conversion_rates")
-    private Map<String, Double> conversionRate;
-
-    public double getConversionRate(String currencyCode) {
-        return conversionRate.get(currencyCode);
-    }
-
+public class JsonConverter {
     public static double getConversionRate(String json, CurrencyType currencyType) {
         try {
             validateJson(json);
@@ -25,7 +17,7 @@ public class Currency {
         }
         Gson gson = new GsonBuilder().create();
 
-        Currency response = gson.fromJson(json, Currency.class);
+        CurrencyConversionRate response = gson.fromJson(json, CurrencyConversionRate.class);
 
         String currencyCode = currencyType.name();
         return response.getConversionRate(currencyCode);
