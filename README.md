@@ -15,3 +15,5 @@ O projeto do conversor de moedas utiliza a API externa de conversão de moedas d
 - Suporte para uma ampla variedade de moedas.
 - Interface simples e interativa com o usuário através do terminal.
 - Criação de histórico das conversões realizadas.
+
+https://github.com/RebecaCamilo/Conversor-de-moeda/assets/71824475/07cd31e7-5640-4441-8d24-eda55d37b45a
