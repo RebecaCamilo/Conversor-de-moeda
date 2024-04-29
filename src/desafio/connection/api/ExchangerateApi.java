@@ -1,5 +1,6 @@
 package desafio.connection.api;
 
+import desafio.connection.file.EnvUtil;
 import desafio.model.CurrencyType;
 
 import java.io.IOException;
@@ -15,7 +16,9 @@ public class ExchangerateApi {
     }
 
     public static HttpRequest createRequestToGetCurrencyRate(CurrencyType currencyType) {
-        String url = "https://v6.exchangerate-api.com/v6/50c9052bdb8f8b10f6264c4e/latest/" + currencyType.name();
+        String apiKey = EnvUtil.get("API_KEY");
+
+        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + currencyType.name();
 
         return HttpRequest.newBuilder()
                 .uri(URI.create(url))
